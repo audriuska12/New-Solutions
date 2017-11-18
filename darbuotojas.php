@@ -1,7 +1,10 @@
 <?php
+
 include "darbuotoju_finansai.php";
 include "vartotojo_rusis.php";
 include "prisijungimo_duomenys.php";
+include "pareigos.php";
+
 class darbuotojas {
 
     var $id;
@@ -16,6 +19,7 @@ class darbuotojas {
     var $finansai;
     var $rusis;
     var $prisijungimo_duomenys;
+    var $pareigos;
 
     public function __construct($data) {
         $this->id = $data['id'];
@@ -30,6 +34,7 @@ class darbuotojas {
         $this->finansai = darbuotoju_finansai::getFromDatabase($data['fk_darbuotoju_finansai']);
         $this->rusis = vartotojo_rusis::getFromDatabase($data['fk_vartotojo_rusis']);
         $this->prisijungimo_duomenys = prisijungimo_duomenys::getFromDatabase($data['fk_prisijungimo_duomenys']);
+        $this->pareigos = darbuotojas::getPareigos($this->id);
     }
 
     public function getFromDatabase($id) {
@@ -40,8 +45,53 @@ class darbuotojas {
         $result = $sql->get_result();
         if (mysqli_affected_rows($dbc) > 0) {
             $data = $result->fetch_assoc();
+            return new darbuotojas($data);
         }
-        return new darbuotojas($data);
+        return NULL;
     }
 
+    public static function getPareigos($id) {
+        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $sql = $dbc->prepare("SELECT * FROM pareigos WHERE id IN (SELECT fk_pareigos FROM turipareigas WHERE fk_darbuotojas = ?)");
+        $sql->bind_param('i', $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $newPareigos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $newPareigos[]=new pareigos($data);
+            }
+        }
+        return $newPareigos;
+    }
+
+    public function addPareigos($id){
+        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $sql = $dbc->prepare("INSERT INTO turipareigas (`fk_darbuotojas`,`fk_pareigos`) VALUES(?, ?)");
+        $sql->bind_param('ii',$this->id, $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        if($dbc->affected_rows > 0){
+            $this->pareigos[]= pareigos::getFromDatabase($id);
+        }
+        return $result;    
+    }
+    
+    public function removePareigos($id){
+        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $sql = $dbc->prepare("DELETE FROM turipareigas WHERE fk_darbuotojas =? && fk_pareigos = ?");
+        $sql->bind_param('ii',$this->id, $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        if($dbc->affected_rows > 0){
+            $length = count($this->pareigos);
+            for($i = 0; $i<$length; $i++){
+                if($this->pareigos[$i]->id==$id){
+                    unset($this->pareigos[$i]);
+                    break;
+                }
+            }
+        }
+        return $result;    
+    }
 }
