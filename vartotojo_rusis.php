@@ -34,7 +34,8 @@ class vartotojo_rusis {
         $result=$sql->get_result();
         if($dbc->affected_rows >0){
             $data = $result->fetch_assoc();
+            return new vartotojo_rusis($data);
         }
-        return new vartotojo_rusis($data);
+        return NULL;
     }
 }
