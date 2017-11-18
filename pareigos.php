@@ -21,7 +21,7 @@ class pareigos {
     }
     
     public function getFromDatabase($id){
-        $dbc=mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $dbc=mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql=$dbc->prepare("SELECT * FROM pareigos WHERE `id`=?");
         $sql->bind_param('i', $id);
         $sql->execute();
@@ -31,5 +31,24 @@ class pareigos {
             return new pareigos($data);
         }
         return null;
+    }
+    
+    public static function addToDatabase($pavadinimas){
+        $dbc=mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql=$dbc->prepare("INSERT INTO pareigos (pavadinimas) VALUES (?)");
+        $sql->bind_param('s', $pavadinimas);
+        $sql->execute();
+        return mysqli_insert_id($dbc);
+    }
+    
+    public static function removeFromDatabase($id){
+        $dbc=mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql1=$dbc->prepare("DELETE FROM turipareigas WHERE fk_pareigos=?");
+        $sql1->bind_param('i', $id);
+        $sql1->execute();
+        $sql2=$dbc->prepare("DELETE FROM pareigos WHERE id=?");
+        $sql2->bind_param('i', $id);
+        $sql2->execute();
+        return (mysqli_affected_rows($dbc) > 0);
     }
 }
