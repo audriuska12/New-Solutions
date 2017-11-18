@@ -5,6 +5,10 @@
         <group>
             <file>file:/C:/xampp/htdocs/NewSolutions/php.ini</file>
             <file>file:/C:/xampp/htdocs/NewSolutions/index.php</file>
+            <file>file:/C:/xampp/htdocs/NewSolutions/vartotojo_rusis.php</file>
+            <file>file:/C:/xampp/htdocs/NewSolutions/testfile.php</file>
+            <file>file:/C:/xampp/htdocs/NewSolutions/darbuotojas.php</file>
+            <file>file:/C:/xampp/htdocs/NewSolutions/pareigos.php</file>
         </group>
     </open-files>
 </project-private>

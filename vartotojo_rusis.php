@@ -27,7 +27,7 @@ class vartotojo_rusis {
     }
     
     public static function getFromDatabase($id){
-        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM `vartotojo_rusis` WHERE `id`=?");
         $sql->bind_param('i', $id);
         $sql->execute();
