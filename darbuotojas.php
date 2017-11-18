@@ -19,7 +19,6 @@ class darbuotojas {
     var $finansai;
     var $rusis;
     var $prisijungimo_duomenys;
-    var $pareigos;
 
     public function __construct($data) {
         $this->id = $data['id'];
@@ -34,11 +33,10 @@ class darbuotojas {
         $this->finansai = darbuotoju_finansai::getFromDatabase($data['fk_darbuotoju_finansai']);
         $this->rusis = vartotojo_rusis::getFromDatabase($data['fk_vartotojo_rusis']);
         $this->prisijungimo_duomenys = prisijungimo_duomenys::getFromDatabase($data['fk_prisijungimo_duomenys']);
-        $this->pareigos = darbuotojas::getPareigos($this->id);
     }
 
     public function getFromDatabase($id) {
-        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * from darbuotojas WHERE id = ?");
         $sql->bind_param('i', $id);
         $sql->execute();
@@ -51,7 +49,7 @@ class darbuotojas {
     }
 
     public static function getPareigos($id) {
-        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM pareigos WHERE id IN (SELECT fk_pareigos FROM turipareigas WHERE fk_darbuotojas = ?)");
         $sql->bind_param('i', $id);
         $sql->execute();
@@ -66,7 +64,7 @@ class darbuotojas {
     }
 
     public function addPareigos($id){
-        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("INSERT INTO turipareigas (`fk_darbuotojas`,`fk_pareigos`) VALUES(?, ?)");
         $sql->bind_param('ii',$this->id, $id);
         $sql->execute();
@@ -78,7 +76,7 @@ class darbuotojas {
     }
     
     public function removePareigos($id){
-        $dbc = mysqli_connect('localhost', 'root', '', 'newsolutions');
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("DELETE FROM turipareigas WHERE fk_darbuotojas =? && fk_pareigos = ?");
         $sql->bind_param('ii',$this->id, $id);
         $sql->execute();
