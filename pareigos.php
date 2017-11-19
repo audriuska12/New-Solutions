@@ -1,47 +1,34 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of darbuotojo_pareigos
- *
- * @author audri
- */
 class pareigos {
 
     var $id;
     var $pavadinimas;
+    var $stazas;
+    var $profesionalumo_lygis;
+    var $sveikatos_sutrikimai;
 
     public function __construct($data) {
         $this->id = $data['id'];
         $this->pavadinimas = $data['pavadinimas'];
+        $this->stazas = $data['stazas'];
+        $this->profesionalumo_lygis = $data['profesionalumo_lygis'];
+        $this->sveikatos_sutrikimai = $data['sveikatos_sutrikimai'];
     }
 
-    public function getFromDatabase($id) {
+    public static function getFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-        $sql = $dbc->prepare("SELECT * FROM pareigos WHERE `id`=?");
+        $sql = $dbc->prepare("SELECT * FROM `pareigos` WHERE `id`=?");
         $sql->bind_param('i', $id);
         $sql->execute();
         $result = $sql->get_result();
-        if (mysqli_affected_rows($dbc) > 0) {
+        if ($dbc->affected_rows > 0) {
             $data = $result->fetch_assoc();
             return new pareigos($data);
         }
-        return null;
+        return NULL;
     }
-
-    public static function addToDatabase($pavadinimas) {
-        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-        $sql = $dbc->prepare("INSERT INTO pareigos (pavadinimas) VALUES (?)");
-        $sql->bind_param('s', $pavadinimas);
-        $sql->execute();
-        return mysqli_insert_id($dbc);
-    }
-
+    
     public static function removeFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql1 = $dbc->prepare("DELETE FROM turipareigas WHERE fk_pareigos=?");
