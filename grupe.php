@@ -1,17 +1,7 @@
 <?php
 
 include "darbuotojas.php";
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of grupe
- *
- * @author audri
- */
 class grupe {
 
     var $id;
@@ -40,16 +30,16 @@ class grupe {
         }
         return NULL;
     }
-    
-    public static function addToDatabase($pavadinimas, $sukurimo_data, $administratorius, $matomumas){
+
+    public static function addToDatabase($pavadinimas, $sukurimo_data, $administratorius, $matomumas) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("INSERT INTO grupe (pavadinimas, sukurimo_data, fk_administratorius, matomumas) VALUES (?, ?, ?, ?)");
         $sql->bind_param('ssii', $pavadinimas, $sukurimo_data, $administratorius, $matomumas);
         $sql->execute();
         return (mysqli_affected_rows($dbc) > 0);
     }
-    
-    public static function deleteFromDatabase($id){
+
+    public static function deleteFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql1 = $dbc->prepare("DELETE FROM darbuotojas_priklauso_grupe WHERE fk_grupe=?");
         $sql1->bind_param('i', $id);
@@ -60,11 +50,11 @@ class grupe {
         return (mysqli_affected_rows($dbc) > 0);
     }
 
-    public function getAdministratorius(){
+    public function getAdministratorius() {
         return darbuotojas::getFromDatabase($this->administratorius);
     }
-    
-    public function getDarbuotojai(){
+
+    public function getDarbuotojai() {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE id = ? OR id IN (SELECT fk_darbuotojas FROM darbuotojas_priklauso_grupe WHERE fk_grupe = ? )");
         $sql->bind_param('ii', $this->administratorius, $this->id);
@@ -73,13 +63,13 @@ class grupe {
         $darbuotojai = [];
         if ($dbc->affected_rows > 0) {
             while ($data = $result->fetch_assoc()) {
-                $darbuotojai[]=new darbuotojas($data);
+                $darbuotojai[] = new darbuotojas($data);
             }
         }
         return $darbuotojai;
     }
-    
-    public static function getViesosGrupes(){
+
+    public static function getViesosGrupes() {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM grupe WHERE matomumas=1");
         $sql->execute();
@@ -87,36 +77,37 @@ class grupe {
         $grupes = [];
         if ($dbc->affected_rows > 0) {
             while ($data = $result->fetch_assoc()) {
-                $grupes[]=new grupe($data);
+                $grupes[] = new grupe($data);
             }
         }
         return $grupes;
     }
-    
-    public function addDarbuotojas($id){
+
+    public function addDarbuotojas($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("INSERT INTO darbuotojas_priklauso_grupe (fk_grupe, fk_darbuotojas) VALUES (?, ?)");
         $sql->bind_param('ii', $this->id, $id);
         $sql->execute();
         return (mysqli_affected_rows($dbc) > 0);
     }
-    
-    public function removeDarbuotojas($id){
+
+    public function removeDarbuotojas($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("DELETE FROM darbuotojas_priklauso_grupe WHERE fk_darbuotojas = ? && fk_grupe = ?");
         $sql->bind_param('ii', $id, $this->id);
         $sql->execute();
         return (mysqli_affected_rows($dbc) > 0);
     }
-    
-    public function changeAdministratorius($id){
+
+    public function changeAdministratorius($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $this->addDarbuotojas($this->administratorius);
         $this->removeDarbuotojas($id);
         $sql = $dbc->prepare("UPDATE grupe SET fk_administratorius = ? WHERE id = ?");
         $sql->bind_param('ii', $id, $this->id);
         $sql->execute();
-        $this->administratorius=$id;
+        $this->administratorius = $id;
         return (mysqli_affected_rows($dbc) > 0);
     }
+
 }
