@@ -79,7 +79,7 @@ class grupe {
         return $darbuotojai;
     }
     
-    public static function getPublicGroups(){
+    public static function getViesosGrupes(){
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM grupe WHERE matomumas=1");
         $sql->execute();

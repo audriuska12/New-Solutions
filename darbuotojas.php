@@ -5,6 +5,7 @@ include "vartotojo_rusis.php";
 include "prisijungimo_duomenys.php";
 include "pareigos.php";
 include "grafikas.php";
+include "pastaba.php";
 
 class darbuotojas {
 
@@ -38,7 +39,7 @@ class darbuotojas {
 
     public static function getFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-        $sql = $dbc->prepare("SELECT * from darbuotojas WHERE id = ?");
+        $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE id = ?");
         $sql->bind_param('i', $id);
         $sql->execute();
         $result = $sql->get_result();
@@ -75,7 +76,7 @@ class darbuotojas {
         }
     }
     
-    public static function getContacts($id){
+    public static function getKontaktai($id){
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT tel_nr, el_pastas, adresas FROM darbuotojas WHERE id=?");
         $sql->bind_param('i', $id);
@@ -87,7 +88,7 @@ class darbuotojas {
         return NULL;
     }
     
-    public function updateContacts($tel_nr, $el_pastas, $adresas){
+    public function updateKontaktai($tel_nr, $el_pastas, $adresas){
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("UPDATE darbuotojas SET tel_nr = ?, el_pastas =?, adresas =? WHERE id=?");
         $sql->bind_param('sssi',$tel_nr, $el_pastas, $adresas, $this->id);
@@ -127,9 +128,12 @@ class darbuotojas {
     
     public function atleisti(){
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-        $sql = $dbc->prepare("UPDATE darbuotojas SET atleistas = 1 WHERE id=?");
-        $sql->bind_param('i', $this->id);
-        $sql->execute();
+        $sql1=$dbc->prepare("DELETE FROM turipareigas WHERE fk_darbuotojas = ?");
+        $sql1->bind_param('i', $this->id);
+        $sql1->execute;
+        $sql2 = $dbc->prepare("UPDATE darbuotojas SET atleistas = 1 WHERE id=?");
+        $sql2->bind_param('i', $this->id);
+        $sql2->execute();
         return (mysqli_affected_rows($dbc) > 0);
     }
     
@@ -223,5 +227,65 @@ class darbuotojas {
             return new grafikas($data);
         }
         return NULL;
+    }
+    
+    public function getGautosPastabosViesos(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM pastaba WHERE viesa=1 && fk_gavejas = ?");
+        $sql->bind_param('i', $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $pastabos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $pastabos[]=new pastaba($data);
+            }
+        }
+        return $pastabos;
+    }
+    
+    public function getGautosPastabosVisos(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM pastaba WHERE fk_gavejas = ?");
+        $sql->bind_param('i', $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $pastabos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $pastabos[]=new pastaba($data);
+            }
+        }
+        return $pastabos;
+    }
+    
+    public function getRasytosPastabosViesos(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM pastaba WHERE viesa=1 && fk_rasytojas = ?");
+        $sql->bind_param('i', $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $pastabos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $pastabos[]=new pastaba($data);
+            }
+        }
+        return $pastabos;
+    }
+    
+    public function getRasytosPastabosVisos(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM pastaba WHERE fk_rasytojas = ?");
+        $sql->bind_param('i', $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $pastabos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $pastabos[]=new pastaba($data);
+            }
+        }
+        return $pastabos;
     }
 }
