@@ -16,6 +16,7 @@ if ($count > 0) {
     echo "Firmoje nėra darbuotojų!";
 }
 ?>
+<a href="registracija.php">Registruoti naują</a>
 <script type="text/javascript">
     function popup(url) {
         newwindow = window.open(url, 'name', 'height=100,width=325,toolbar=no,status=no,menu=no,scrollbars=no,resizable=no');

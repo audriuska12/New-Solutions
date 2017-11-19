@@ -202,6 +202,15 @@ class darbuotojas {
         $this->finansai = $id;
         return (mysqli_affected_rows($dbc) > 0);
     }
+    
+    public function setVartotojoVardas($vardas) {
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("UPDATE darbuotojas SET fk_vartotojo_vardas=? WHERE id=?");
+        $sql->bind_param('si', $vardas, $this->id);
+        $sql->execute();
+        $this->vartotojo_vardas = $vardas;
+        return (mysqli_affected_rows($dbc) > 0);
+    }
 
     public function getRusis() {
         return vartotojo_rusis::getFromDatabase($this->rusis);
