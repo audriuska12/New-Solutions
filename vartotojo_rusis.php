@@ -41,5 +41,19 @@ class vartotojo_rusis {
         $sql->execute();
         return mysqli_insert_id($dbc);
     }
+    
+    public static function getVartotojuRusys(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM vartotojo_rusis");
+        $sql->execute();
+        $result = $sql->get_result();
+        $rusys = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $rusys[] = new vartotojo_rusis($data);
+            }
+        }
+        return $rusys;
+    }
 
 }
