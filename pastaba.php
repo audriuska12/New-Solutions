@@ -31,6 +31,14 @@ class pastaba {
         return NULL;
     }
 
+    public static function addToDatabase($viesa, $tekstas, $rasytojas, $gavejas){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql=$dbc->prepare("INSERT INTO pastaba (viesa, tekstas, rasymo_data, fk_rasytojas, fk_gavejas) VALUES(?, ?, ?, ?, ?)");
+        $sql->bind_param('issii', $viesa, $tekstas, date('Y-m-d H:i:s'), $rasytojas, $gavejas);
+        $sql->execute();
+        return (mysqli_affected_rows($dbc)>0);
+    }
+    
     public static function deleteFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("FELETE FROM pastaba WHERE id = ?");

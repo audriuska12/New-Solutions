@@ -130,10 +130,11 @@ class darbuotojas {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql1 = $dbc->prepare("DELETE FROM turipareigas WHERE fk_darbuotojas = ?");
         $sql1->bind_param('i', $this->id);
-        $sql1->execute;
+        $sql1->execute();
         $sql2 = $dbc->prepare("UPDATE darbuotojas SET atleistas = 1 WHERE id=?");
         $sql2->bind_param('i', $this->id);
         $sql2->execute();
+        $this->atleistas = 1;
         return (mysqli_affected_rows($dbc) > 0);
     }
 
@@ -142,6 +143,7 @@ class darbuotojas {
         $sql = $dbc->prepare("UPDATE darbuotojas SET atleistas = 0 WHERE id=?");
         $sql->bind_param('i', $this->id);
         $sql->execute();
+        $this->atleistas = 0;
         return (mysqli_affected_rows($dbc) > 0);
     }
 

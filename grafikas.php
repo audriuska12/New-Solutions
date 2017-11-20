@@ -38,6 +38,15 @@ class grafikas {
         }
         return null;
     }
+    
+    public static function addToDatabase($laikas_pirmad, $laikas_antrad, $laikas_treciad, $laikas_ketvirtad, $laikas_penktad, $laikas_sestad, $laikas_sekmad, $darbuotojas) {
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("INSERT INTO grafikas (laikas_pirmad, laikas_antrad, laikas_treciad, laikas_ketvirtad, laikas_penktad, laikas_sestad, laikas_sekmad, keitimo_data, fk_darbuotojas) VALUES(?,?,?,?,?,?,?,?,?)");
+        $date = date('Y-m-d H:i:s');
+        $sql->bind_param('ssssssssi', $laikas_pirmad, $laikas_antrad, $laikas_treciad, $laikas_ketvirtad, $laikas_penktad, $laikas_sestad, $laikas_sekmad, $date, $darbuotojas);
+        $sql->execute();
+        return (mysqli_affected_rows($dbc) > 0);
+    }
 
     public function update($laikas_pirmad, $laikas_antrad, $laikas_treciad, $laikas_ketvirtad, $laikas_penktad, $laikas_sestad, $laikas_sekmad) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));

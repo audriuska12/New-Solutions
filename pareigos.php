@@ -29,6 +29,14 @@ class pareigos {
         return NULL;
     }
     
+    public static function addToDatabase($pavadinimas, $stazas, $profesionalumo_lygis, $sveikatos_sutrikimai) {
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("INSERT INTO pareigos (pavadinimas, stazas, profesionalumo_lygis, sveikatos_sutrikimai) VALUES (?, ?, ?, ?)");
+        $sql->bind_param('siss', $pavadinimas, $stazas, $profesionalumo_lygis, $sveikatos_sutrikimai);
+        $sql->execute();
+        return (mysqli_insert_id($dbc));
+    }
+    
     public static function removeFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql1 = $dbc->prepare("DELETE FROM turipareigas WHERE fk_pareigos=?");
@@ -40,4 +48,10 @@ class pareigos {
         return (mysqli_affected_rows($dbc) > 0);
     }
 
+    public static function isvalyti(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("DELETE FROM pareigos WHERE id NOT IN (SELECT fk_pareigos from turipareigas)");
+        $sql->execute();
+        return (mysqli_affected_rows($dbc) > 0);
+    }
 }

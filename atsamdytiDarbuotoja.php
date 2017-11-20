@@ -1,7 +1,6 @@
 <?php
 include "darbuotojas.php";
 $darbuotojas = darbuotojas::getFromDatabase($_GET['id']);
-$darbuotojas->atleisti();
-pareigos::isvalyti();
+$darbuotojas->atsamdyti();
 header("Location: darbuotoju_sarasas.php");
 
