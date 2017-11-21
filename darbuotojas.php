@@ -161,6 +161,21 @@ class darbuotojas {
         }
         return $newPareigos;
     }
+    
+    public function getNeturimosPareigos() {
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM pareigos WHERE id NOT IN (SELECT fk_pareigos FROM turipareigas WHERE fk_darbuotojas = ?)");
+        $sql->bind_param('i', $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $newPareigos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $newPareigos[] = new pareigos($data);
+            }
+        }
+        return $newPareigos;
+    }
 
     public function addPareigos($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));

@@ -29,6 +29,20 @@ class pareigos {
         return NULL;
     }
     
+    public static function getVisos(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM pareigos");
+        $sql->execute();
+        $result = $sql->get_result();
+        $Pareigos = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $Pareigos[] = new pareigos($data);
+            }
+        }
+        return $Pareigos;
+    }
+    
     public static function addToDatabase($pavadinimas, $stazas, $profesionalumo_lygis, $sveikatos_sutrikimai) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("INSERT INTO pareigos (pavadinimas, stazas, profesionalumo_lygis, sveikatos_sutrikimai) VALUES (?, ?, ?, ?)");
