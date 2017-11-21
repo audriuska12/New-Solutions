@@ -1,6 +1,6 @@
 <?php
 
-include "darbuotojas.php";
+include_once "darbuotojas.php";
 
 class grupe {
 
@@ -68,6 +68,51 @@ class grupe {
         }
         return $darbuotojai;
     }
+    
+    public function getDarbuotojaiBeAdministratoriaus(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE id IN (SELECT fk_darbuotojas FROM darbuotojas_priklauso_grupe WHERE fk_grupe = ? )");
+        $sql->bind_param('i', $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $darbuotojai = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $darbuotojai[] = new darbuotojas($data);
+            }
+        }
+        return $darbuotojai;
+    }
+    
+    public function getNeNariai(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE id != ? && id NOT IN (SELECT fk_darbuotojas FROM darbuotojas_priklauso_grupe WHERE fk_grupe = ? )");
+        $sql->bind_param('ii',$this->administratorius, $this->id);
+        $sql->execute();
+        $result = $sql->get_result();
+        $darbuotojai = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $darbuotojai[] = new darbuotojas($data);
+            }
+        }
+        return $darbuotojai;
+    }
+
+    public static function getPagalAdministratoriu($administratorius) {
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM grupe WHERE fk_administratorius=?");
+        $sql->bind_param('i', $administratorius);
+        $sql->execute();
+        $result = $sql->get_result();
+        $grupes = [];
+        if ($dbc->affected_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $grupes[] = new grupe($data);
+            }
+        }
+        return $grupes;
+    }
 
     public static function getViesosGrupes() {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
@@ -100,6 +145,9 @@ class grupe {
     }
 
     public function changeAdministratorius($id) {
+        if ($id == $this->administratorius) {
+            return 0;
+        }
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $this->addDarbuotojas($this->administratorius);
         $this->removeDarbuotojas($id);
