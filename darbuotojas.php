@@ -300,4 +300,25 @@ class darbuotojas {
         return $pastabos;
     }
 
+    public function getPagalVartotojoVarda($vartotojo_vardas){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE fk_prisijungimo_duomenys = ?");
+        $sql->bind_param('s', $vartotojo_vardas);
+        $sql->execute();
+        $result = $sql->get_result();
+        if (mysqli_affected_rows($dbc) > 0) {
+            $data = $result->fetch_assoc();
+            return new darbuotojas($data);
+        }
+        return NULL;
+    }
+    
+    public function paskirtiVartotojoVarda($vartotojo_vardas){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("UPDATE darbuotojas SET fk_prisijungimo_duomenys=? WHERE id=?");
+        $sql->bind_param('si', $vartotojo_vardas, $this->id);
+        $sql->execute();
+        $this->vartotojo_vardas = $vartotojo_vardas;
+        return (mysqli_affected_rows($dbc) > 0);
+    }
 }
