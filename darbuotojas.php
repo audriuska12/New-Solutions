@@ -238,7 +238,7 @@ class darbuotojas {
         $sql = $dbc->prepare("UPDATE darbuotojas SET fk_vartotojo_rusis=? WHERE id=?");
         $sql->bind_param('ii', $id, $this->id);
         $sql->execute();
-        $this->finansai = $id;
+        $this->rusis = $id;
         return (mysqli_affected_rows($dbc) > 0);
     }
 
