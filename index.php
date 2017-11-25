@@ -20,7 +20,7 @@
       <label for="pwd">Slaptažodis:</label>
       <input type="password" class="form-control" id="pwd" placeholder="slaptažodis" name="userPass">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-default">Prisijungti</button>
   </form>
 </div>
 <?php
@@ -32,6 +32,11 @@
 	$dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
 	$userName = "";
         $userPass = "";
+        
+        
+        include "darbuotojas.php";
+        
+        
         if(isset($_POST['username'])) { 
             $userName = $_POST["username"];
         }
@@ -59,7 +64,8 @@
 		die();
 	}
 	session_start();
-	$_SESSION["sessionUname"] = $userName;
+        $user->darbuotojas::getPagalVartotojoVarda($username);
+	$_SESSION["userID"] = $user;
 ?>
 
 </body>
