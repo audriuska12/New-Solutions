@@ -2,7 +2,7 @@
     <head><title>Darbuotojo registracija</title></head>
     <body>
         Darbuotojo registracija:
-        <form action ="registerprocess.php" method="post">
+        <form action ="registracija.php" method="post">
             Vardas:<input name="vardas" type="text"></input></br>
             Pavardė:<input name="pavarde" type="text"></input></br>
             Telefono nr.:<input name="tel_nr" type="text"></input></br>
@@ -27,9 +27,36 @@
             for($i=0; $i<$countrus; $i++){
                 echo ("<option value=\"".$rusys[$i]->id."\">".$rusys[$i]->pavadinimas."");
             }
+            
+            
+            $phpVardas = "";
+            $phpPavarde = "";
+            $phpTel_nr = "";
+            $phpEl_pastas = "";
+            $phpAdresas = "";
+            $phpAlga = "";
+            $phpFinansai = "";
+            if(isset($_POST("vardas")) && 
+                    isset($_POST("pavarde")) && 
+                    isset($_POST("tel_nr")) && 
+                    isset($_POST("el_pastas")) && 
+                    isset($_POST("adresas")) && 
+                    isset($_POST("alga")) && 
+                    isset($_POST("finansai")))
+                {
+                $phpVardas = "";
+                $phpPavarde = "";
+                $phpTel_nr = "";
+                $phpEl_pastas = "";
+                $phpAdresas = "";
+                $phpAlga = "";
+                $phpFinansai = "";
+            }
+            
             ?>
             </select></br>
             <input type="submit" value="Registruoti"></input>
         </form>
+        
     <body>
 </html>
