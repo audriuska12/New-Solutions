@@ -17,7 +17,7 @@
       <input type="username" class="form-control" id="email" placeholder="Prisijungimo vardas" name="username">
     </div>
     <div class="form-group">
-      <label for="pwd">Password:</label>
+      <label for="pwd">Slaptažodis:</label>
       <input type="password" class="form-control" id="pwd" placeholder="slaptažodis" name="userPass">
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
@@ -30,9 +30,14 @@
 	$db = 'newsolutions';
 	$conn = new mysqli('localhost', $user, $pass, $db) or die("Unable to connect");*/
 	$dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-	
-	$userName = $_POST["username"];
-	$userPass = $_POST["userPass"];
+	$userName = "";
+        $userPass = "";
+        if(isset($_POST['username'])) { 
+            $userName = $_POST["username"];
+        }
+        if(isset($_POST['userPass'])) { 
+            $userPass = $_POST["userPass"];
+        }
 	$isValidated = false;
 	$sql = $dbc->prepare("SELECT vartotojo_vardas, COUNT(*) as total, atpazinimo_klausimas, atpazinimo_atsakymas
 				FROM prisijungimo_duomenys
