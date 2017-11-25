@@ -41,7 +41,7 @@ class pastaba {
     
     public static function deleteFromDatabase($id) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-        $sql = $dbc->prepare("FELETE FROM pastaba WHERE id = ?");
+        $sql = $dbc->prepare("DELETE FROM pastaba WHERE id = ?");
         $sql->bind_param('i', $id);
         $sql->execute();
         return (mysqli_affected_rows($dbc) > 0);
