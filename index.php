@@ -1,37 +1,61 @@
 <!DOCTYPE html>
-<html lang="en lt">
-    <head>
-        <!-- framework -->
-        <script src="./frameworks/angular-1.5.0.min.js"></script>
-        <script src="./frameworks/angular-ui-router.min.js"></script>
-        <script src="./frameworks/ct-ui-router-extras.min.js"></script>
-        <link href="./frameworks/angular-csp.css" rel="stylesheet" />
-        <link href="./frameworks/angular-material.min.css" rel="stylesheet" />
-        <script src="./frameworks/angular-animate.js"></script>
-        <script src="./frameworks/angular-aria.js"></script>	
-        <script src="./frameworks/angular-material.js"></script>
-        <script src="./frameworks/Chart.min.js"></script>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-        <script src="./js/default.js"></script>
-    </head>
-    <body  ng-app="myApp" ng-controller="ngCtrl_main" ng-cloak layout="row">
-        <div layout="row" layout-align="center center" flex>
-            <div layout="column" flex="30" flex-xs="85">
-                <md-input-container>
-                    <input placeholder="Vardas" type="text" ng-model="name" aria-label="Users code"></input>
-                </md-input-container>
-                <md-input-container >
-                    <input placeholder="Slaptažodis" type="password" ng-model="passw" aria-label="Place for the password for administrators"></input>
-                </md-input-container>
-                <div layout="column" layout-align="start center">
-                    <md-button class="md-raised md-primary" ng-click="submit()">
-                        <label>Prisijungti</label>
-                    </md-button>
-                    <md-button class="md-accent">
-                        <label>Pamiršau slaptažodį</label>
-                    </md-button>
-                </div>
-            </div>
-        </div>
-    </body>
+<div class="container">
+  <form action="index.php" method="POST">
+    <div class="form-group">
+      <label for="username">Vartotojo vardas:</label>
+      <input type="username" class="form-control" id="email" placeholder="Prisijungimo vardas" name="username">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input type="password" class="form-control" id="pwd" placeholder="slaptažodis" name="userPass">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
+<?php
+	// connect to datebase
+	/*$user = 'root';
+	$pass = '';
+	$db = 'newsolutions';
+	$conn = new mysqli('localhost', $user, $pass, $db) or die("Unable to connect");*/
+	$dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+	
+	$userName = $_POST["username"];
+	$userPass = $_POST["userPass"];
+	$isValidated = false;
+	$sql = $dbc->prepare("SELECT vartotojo_vardas, COUNT(*) as total, atpazinimo_klausimas, atpazinimo_atsakymas
+				FROM prisijungimo_duomenys
+					WHERE `vartotojo_vardas`='{$userName}' && `slaptazodis`='{$userPass}' ");
+	$sql->execute();
+	$result = $sql->get_result();
+	$dbAts = null;
+	if($userName != "" && $userPass != "")
+		while($row = $result->fetch_assoc()) {
+		  if($row["total"] !== 0){
+			  $isValidated = true;
+			  echo "Prisijungimas sėkmingas";
+		  }else {
+			 echo "Neteisingai įvedete duomenis";
+		  }
+
+		}
+	if(!$isValidated){
+		die();
+	}
+	session_start();
+	$_SESSION["sessionUname"] = $userName;
+?>
+
+</body>
 </html>
