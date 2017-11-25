@@ -36,13 +36,13 @@
             $phpAdresas = "";
             $phpAlga = "";
             $phpFinansai = "";
-            if(isset($_POST("vardas")) && 
-                    isset($_POST("pavarde")) && 
-                    isset($_POST("tel_nr")) && 
-                    isset($_POST("el_pastas")) && 
-                    isset($_POST("adresas")) && 
-                    isset($_POST("alga")) && 
-                    isset($_POST("finansai")))
+            if(isset($_POST["vardas"]) && 
+                    isset($_POST["pavarde"]) && 
+                    isset($_POST["tel_nr"]) && 
+                    isset($_POST["el_pastas"]) && 
+                    isset($_POST["adresas"]) && 
+                    isset($_POST["alga"]) && 
+                    isset($_POST["finansai"]))
                 {
                 $phpVardas = "";
                 $phpPavarde = "";
