@@ -1,23 +1,38 @@
 <?php
-if(isset($_POST['administratorius'])){
-    include "grupe.php";
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include "darbuotojas.php";
+include "grupe.php";
+if (!isset($_SESSION['userID'])) {
+    header("Location:accessDenied.php");
+}
+if (isset($_GET['id'])) {
+    if (grupe::getFromDatabase($_GET['id'])->administratorius != $_SESSION['userID']) {
+        header("Location:accessDenied.php");
+    }
+}
+if (isset($_POST['administratorius'])) {
+
     $grupe = grupe::getFromDatabase($_POST['id']);
-    $senas = $grupe->administratorius;
-    $grupe->changeAdministratorius($_POST['administratorius']);
-    header("Location: grupesAdministruojamos.php?id=".$senas);
+    if (!$grupe->administratorius == $_SESSION['userID']) {
+        header("Location:accessDenied.php");
+    } else {
+        $grupe->changeAdministratorius($_POST['administratorius']);
+        header("Location: grupesAdministruojamos.php");
+    }
 }
 ?>
-<form action="keistiAdministratoriu.php" method="post">
-    <?php echo ("<input type=\"hidden\" name=\"id\" value=\"".$_GET['id']."\"></input>");?>
+<form action="grupeKeistiAdministratoriu.php?id=<?php echo $_GET['id']?>" method="post">
+    <?php echo ("<input type=\"hidden\" name=\"id\" value=\"" . $_GET['id'] . "\"></input>"); ?>
     Pasirinkti naują administratorių:<select name="administratorius">
         <?php
-            include "grupe.php";
-            $grupe = grupe::getFromDatabase($_GET['id']);
-            $nariai= $grupe->getDarbuotojaiBeAdministratoriaus();
-            $count = count($nariai);
-            for($i = 0; $i<$count; $i++){
-                echo("<option value=\"".$nariai[$i]->id."\">".$nariai[$i]->pavarde." ".$nariai[$i]->vardas."</option>");
-            }
+        $grupe = grupe::getFromDatabase($_GET['id']);
+        $nariai = $grupe->getDarbuotojaiBeAdministratoriaus();
+        $count = count($nariai);
+        for ($i = 0; $i < $count; $i++) {
+            echo("<option value=\"" . $nariai[$i]->id . "\">" . $nariai[$i]->pavarde . " " . $nariai[$i]->vardas . "</option>");
+        }
         ?>
     </select></br>
     <input type="submit" value="Patvirtinti"></input>

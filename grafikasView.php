@@ -1,5 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="tables.css">
+    </head>
+    <body>
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 include "darbuotojas.php";
+if (!isset($_SESSION['userID'])) {
+    header("Location:accessDenied.php");
+}
 $darbuotojas=darbuotojas::getFromDatabase($_GET['id']);
 $grafikas=$darbuotojas->getGrafikas();
 if($grafikas != NULL){

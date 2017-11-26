@@ -1,0 +1,1 @@
+<a href ="profilis.php">Profilis</a> <a href ="grupesView.php">Grupės</a> <a href="darbuotoju_sarasas.php">Darbuotojų sąrašas</a></br>

@@ -57,6 +57,14 @@ class darbuotojas {
         $sql->execute();
         return (mysqli_insert_id($dbc));
     }
+    
+    public static function update($id, $vardas, $pavarde, $tel_nr, $el_pastas, $adresas, $alga, $finansai, $rusis) {
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("UPDATE darbuotojas SET vardas = ?, pavarde = ?, tel_nr = ?, el_pastas = ?, adresas = ?, alga = ?, fk_darbuotoju_finansai = ?, fk_vartotojo_rusis=? WHERE id=?");
+        $sql->bind_param('sssssdiii', $vardas, $pavarde, $tel_nr, $el_pastas, $adresas, $alga, $finansai, $rusis, $id);
+        $sql->execute();
+        return (mysqli_affected_rows($dbc));
+    }
 
     public static function removeFromDatabase($id) {#reikalauti, kad vartotojas nebūtų grupės administratorius
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
@@ -255,10 +263,10 @@ class darbuotojas {
         return NULL;
     }
 
-    public function getGautosPastabosViesos() {
+    public function getGautosPastabosViesos($id = 0) {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
-        $sql = $dbc->prepare("SELECT * FROM pastaba WHERE viesa=1 && fk_gavejas = ?");
-        $sql->bind_param('i', $this->id);
+        $sql = $dbc->prepare("SELECT * FROM pastaba WHERE (viesa=1 || fk_rasytojas = ?) && fk_gavejas = ?");
+        $sql->bind_param('ii', $id, $this->id);
         $sql->execute();
         $result = $sql->get_result();
         $pastabos = [];
@@ -335,5 +343,28 @@ class darbuotojas {
         $sql->execute();
         $this->vartotojo_vardas = $vartotojo_vardas;
         return (mysqli_affected_rows($dbc) > 0);
+    }
+    
+    public function arVirsesnis(darbuotojas $kitas){
+        $rusisKitas = $kitas->getRusis()->pavadinimas;
+        $rusisSitas = $this->getRusis()->pavadinimas;
+        if ($rusisSitas == "Darbuotojas") {
+            return false;
+        }
+        if($rusisSitas == "Parduotuvės vadovas"){
+            if($rusisKitas == "Darbuotojas") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        if($rusisSitas == "Parduotuvių tinklo vadovas"){
+            if($rusisKitas == "Darbuotojas" || $rusisKitas == "Parduotuvės vadovas"){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

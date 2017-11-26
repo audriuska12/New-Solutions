@@ -1,15 +1,20 @@
 <?php
-    if(!isset($_POST['administratorius'])){
-        
-    } else{
-        include "grupe.php";
-        grupe::addToDatabase($_POST['pavadinimas'], date("Y-m-d"), $_POST['administratorius'], $_POST['matomumas']);
-        header("Location: grupesAdministruojamos.php?id=".$_POST['administratorius']);
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include "darbuotojas.php";
+include "grupe.php";
+if (!isset($_SESSION['userID'])) {
+    header("Location:accessDenied.php");
+} else {
+    if (isset($_POST['pavadinimas'])) {
+        grupe::addToDatabase($_POST['pavadinimas'], date("Y-m-d"), $_SESSION['userID'], $_POST['matomumas']);
+        header("Location: grupesView.php");
     }
+}
 ?>
 
 <form action="grupeCreate.php" method="post">
-    <?php echo("<input type=\"hidden\" name=\"administratorius\" value=\"".$_GET['id']."\"></input>");?>
     Pavadinimas:<input type="text" name="pavadinimas"></input></br>
     Matomumas:<select name="matomumas">
         <option value="0">Privati</option>

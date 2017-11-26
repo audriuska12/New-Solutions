@@ -1,9 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="tables.css">
+    </head>
+    <body>
 <?php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include "darbuotojas.php";
-$darbuotojas=darbuotojas::getFromDatabase($_GET['id']);
+if (!isset($_SESSION['userID'])) {
+    header("Location:accessDenied.php");
+}
+$darbuotojas=darbuotojas::getFromDatabase($_SESSION['userID']);
 echo($darbuotojas->pavarde." ".$darbuotojas->vardas." gautos pastabos:");
 $pastabos=$darbuotojas->getGautosPastabosVisos();
 $count=count($pastabos);
@@ -16,5 +25,4 @@ if($count>0){
     }
     echo("</table>");
 }
-echo("<a href=\"pastabaRasyti.php?id=".$darbuotojas->id."&wr=".$_SESSION['userid']."\">Rašyti naują</a>");
 

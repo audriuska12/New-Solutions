@@ -129,6 +129,9 @@ class grupe {
     }
 
     public function addDarbuotojas($id) {
+        if($id==$this->administratorius){
+            return false;
+        }
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("INSERT INTO darbuotojas_priklauso_grupe (fk_grupe, fk_darbuotojas) VALUES (?, ?)");
         $sql->bind_param('ii', $this->id, $id);
