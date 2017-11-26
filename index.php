@@ -54,11 +54,25 @@
             while ($row = $result->fetch_assoc()) {
                 if ($row["total"] !== 0) {
                     $isValidated = true;
-                    echo "Prisijungimas sėkmingas";
                 } else {
                     echo "Neteisingai įvedete duomenis";
                 }
             }
+        }
+        if($isValidated) {
+            $sql = $dbc->prepare("SELECT vardas, COUNT(*) as total
+                                    FROM darbuotojas
+					WHERE `atleistas`='0'");
+             while ($row = $result->fetch_assoc()) {
+                if ($row["total"] !== 0) {
+                    $isValidated = true;
+                  echo "Prisijungimas sėkmingas";
+                } else if($row["total"] == 0 && $row["vardas"] !== 0) {
+                    echo "Vartotojas neturi teisių prisijungti";
+                    $isValidated = false;
+                }
+            }
+            
         }
         if (!$isValidated) {
             die();
