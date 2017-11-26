@@ -44,13 +44,13 @@
                     isset($_POST["alga"]) && 
                     isset($_POST["finansai"]))
                 {
-                $phpVardas = "";
-                $phpPavarde = "";
-                $phpTel_nr = "";
-                $phpEl_pastas = "";
-                $phpAdresas = "";
-                $phpAlga = "";
-                $phpFinansai = "";
+                $phpVardas = $_POST["vardas"];
+                $phpPavarde = $_POST["pavarde"];
+                $phpTel_nr = $_POST["tel_nr"];
+                $phpEl_pastas = $_POST["el_pastas"];
+                $phpAdresas = $_POST["adresas"];
+                $phpAlga = $_POST["alga"];
+                $phpFinansai = $_POST["finansai"];
             }
             
             ?>
@@ -58,5 +58,5 @@
             <input type="submit" value="Registruoti"></input>
         </form>
         
-    <body>
+    </body>
 </html>
