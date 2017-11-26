@@ -6,6 +6,7 @@ include "prisijungimo_duomenys.php";
 include "pareigos.php";
 include "grafikas.php";
 include "pastaba.php";
+include_once "grupe.php";
 
 class darbuotojas {
 
@@ -323,7 +324,7 @@ class darbuotojas {
         return $pastabos;
     }
 
-    public function getPagalVartotojoVarda($vartotojo_vardas){
+    public static function getPagalVartotojoVarda($vartotojo_vardas){
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE fk_prisijungimo_duomenys = ?");
         $sql->bind_param('s', $vartotojo_vardas);
@@ -366,5 +367,18 @@ class darbuotojas {
             }
         }
         return false;
+    }
+    
+    public function getMatomosGrupes(){
+        $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
+        $sql = $dbc->prepare("SELECT * FROM grupe WHERE matomumas = 1 OR fk_administratorius = ? OR id in (SELECT fk_grupe FROM darbuotojas_priklauso_grupe WHERE fk_darbuotojas=?)");
+        $sql->bind_param('ii', $this->id, $this->id);
+        $sql->execute();
+        $rez = $sql->get_result();
+        $grupes=[];
+        while($data=$rez->fetch_assoc()){
+            $grupes[] = new grupe($data);
+        }
+        return $grupes;
     }
 }
