@@ -35,6 +35,7 @@
             echo ("<a href=\"\" onClick=\"popup('kontaktaiRedaguoti.php')\">Redaguoti kontaktus</a></br>");
             echo ("<a href=\"\" onClick=\"popup('grafikasView.php?id=" . $_SESSION['userID'] . "')\"\">Grafikas<a></br>");
             echo ("<a href=\"\" onClick=\"popup('pareigosRodyti.php?id=" . $_SESSION['userID'] . "')\"\">Pareigos<a></br>");
+			echo ("<a href=\"\" onClick=\"popup('pastabosVisos.php?id=" . $_SESSION['userID'] . "')\"\">Pastabos<a></br>");
         }
         if ($user->arVirsesnis($darbuotojas) || ($user->id == $darbuotojas->id && $user->getRusis()->pavadinimas == "Parduotuvių tinklo vadovas")) {
         echo ("<a href=\"\" onClick=\"popup('profilisEdit.php?id=" . ((isset($_GET['id'])? $_GET['id']:$_SESSION['userID'] )). "')\"\">Redaguoti profilį<a></br>");

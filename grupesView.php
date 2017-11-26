@@ -13,7 +13,6 @@
         if (!isset($_SESSION['userID'])) {
             header("Location:accessDenied.php");
         }
-        include "grupe.php";
         $darbuotojas = darbuotojas::getFromDatabase($_SESSION['userID']);
         echo("Administruojamos grupės:</br>");
         include "grupesAdministruojamos.php";

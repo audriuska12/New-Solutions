@@ -12,6 +12,7 @@ include "darbuotojas.php";
 if (!isset($_SESSION['userID'])) {
     header("Location:accessDenied.php");
 }
+$user=darbuotojas::getFromDatabase($_SESSION['userID']);
 $darbuotojas=darbuotojas::getFromDatabase($_GET['id']);
 echo($darbuotojas->pavarde." ".$darbuotojas->vardas." gautos pastabos:");
 $pastabos=$darbuotojas->getGautosPastabosViesos($_SESSION['userID']);
@@ -26,5 +27,6 @@ if($count>0){
     echo("</table>");
 }
 echo ("</br>");
-echo("<a href=\"pastabaRasyti.php?id=".$darbuotojas->id."\">Rašyti naują</a>");
+if($user->arVirsesnis($darbuotojas)){
+echo("<a href=\"pastabaRasyti.php?id=".$darbuotojas->id."\">Rašyti naują</a>");}
 

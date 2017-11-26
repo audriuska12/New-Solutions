@@ -13,7 +13,7 @@ if (!($rusis == "Parduotuvės vadovas" || $rusis == "Parduotuvių tinklo vadovas
     header("Location:accessDenied.php");
 } else {
     $darbuotojas = darbuotojas::getFromDatabase($_GET['darbuotojas']);
-    if(!$user->arVirsesnis($darbuotojas)){
+    if(!($user->arVirsesnis($darbuotojas) || $user->id==$darbuotojas->id)){
        header("Location:accessDenied.php"); 
     } else{
         $darbuotojas->removePareigos($_GET['pareigos']);

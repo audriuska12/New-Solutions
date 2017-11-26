@@ -12,10 +12,10 @@
         if (!isset($_SESSION['userID'])) {
             header("Location:accessDenied.php");
         }
-        $darbuotojas = darbuotojas::getFromDatabase($_SESSION['userID']);
+        $user = darbuotojas::getFromDatabase($_SESSION['userID']);
         $darbuotojas = darbuotojas::getFromDatabase($_GET['id']);
-        $rusis = $darbuotojas->getRusis()->pavadinimas;
-        if (!($rusis == "Parduotuvės vadovas" || $rusis == "Parduotuvių tinklo vadovas") || !$darbuotojas->arVirsesnis($darbuotojas)) {
+        $rusis = $user->getRusis()->pavadinimas;
+        if (!(($rusis == "Parduotuvės vadovas" || $rusis == "Parduotuvių tinklo vadovas") || $user->arVirsesnis($darbuotojas))) {
             header("Location:accessDenied.php");
         } else {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
