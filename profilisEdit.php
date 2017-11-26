@@ -20,7 +20,7 @@
                 echo "<script>window.close();</script>";
             } else {
                 $darbuotojas = darbuotojas::getFromDatabase($_GET['id']);
-                if (!($user->arVirsesnis($darbuotojas) && $user->getRusis()->pavadinimas == "Parduotuvių tinklo vadovas")) {
+                if (!($user->arVirsesnis($darbuotojas) || $user->getRusis()->pavadinimas == "Parduotuvių tinklo vadovas")) {
                     header("Location:accessDenied.php");
                 } else {
                     echo("<form action=\"profilisEdit.php?id=" . $_GET['id'] . "\" method=\"POST\">");
