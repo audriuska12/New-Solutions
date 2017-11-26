@@ -24,6 +24,9 @@
             </form>
         </div>
         <?php
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         // connect to datebase
         /* $user = 'root';
           $pass = '';
@@ -47,7 +50,11 @@
         $sql = $dbc->prepare("SELECT vartotojo_vardas, COUNT(*) as total, atpazinimo_klausimas, atpazinimo_atsakymas
 				FROM prisijungimo_duomenys
 					WHERE `vartotojo_vardas`='{$userName}' && `slaptazodis`='{$userPass}' ");
+       // var_dump($sql);
         $sql->execute();
+       // echo mysqli_affected_rows($dbc);
+       // echo "----------po execute---------------------------------------------------";
+       // var_dump($dbc);
         $result = $sql->get_result();
         $dbAts = null;
         if ($userName != "" && $userPass != "") {
@@ -60,10 +67,13 @@
             }
         }
         if($isValidated) {
-            $sql = $dbc->prepare("SELECT vardas, COUNT(*) as total
+            $sql1 = $dbc->prepare("SELECT vardas, COUNT(*) as total
                                     FROM darbuotojas
 					WHERE `atleistas`='0'");
-             while ($row = $result->fetch_assoc()) {
+            $sql1->execute();
+            $result = $sql1->get_result();
+            //var_dump($dbc); die;
+              while ($row = $result->fetch_assoc()) {
                 if ($row["total"] !== 0) {
                     $isValidated = true;
                   echo "Prisijungimas sėkmingas";
@@ -77,9 +87,10 @@
         if (!$isValidated) {
             die();
         }
-        session_start();
-        $user=darbuotojas::getPagalVartotojoVarda($username);
+        //session_start();
+        $user=darbuotojas::getPagalVartotojoVarda($userName);
         $_SESSION["userID"] = $user->id;
+       // var_dump($user);
         ?>
 
     </body>
