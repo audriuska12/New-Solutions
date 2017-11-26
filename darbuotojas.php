@@ -328,10 +328,12 @@ class darbuotojas {
         $dbc = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
         $sql = $dbc->prepare("SELECT * FROM darbuotojas WHERE fk_prisijungimo_duomenys = ?");
         $sql->bind_param('s', $vartotojo_vardas);
+        //var_dump($sql);
         $sql->execute();
         $result = $sql->get_result();
         if (mysqli_affected_rows($dbc) > 0) {
             $data = $result->fetch_assoc();
+           //  var_dump($data);
             return new darbuotojas($data);
         }
         return NULL;
