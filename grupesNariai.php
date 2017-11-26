@@ -13,7 +13,6 @@
         if (!isset($_SESSION['userID'])) {
             header("Location:accessDenied.php");
         }
-        include "grupe.php";
         $grupe = grupe::getFromDatabase($_GET['id']);
         $administratorius = $grupe->getAdministratorius();
         $nariai = $grupe->getDarbuotojaiBeAdministratoriaus();
