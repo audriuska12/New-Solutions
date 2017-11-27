@@ -21,6 +21,7 @@
                     <input type="password" class="form-control" id="pwd" placeholder="slaptažodis" name="userPass">
                 </div>
                 <button type="submit" class="btn btn-default">Prisijungti</button>
+                <button name="register" type="submit" class="btn btn-default">Registruotis</button>
             </form>
         </div>
         <?php
@@ -42,6 +43,9 @@
 
         if (isset($_POST['username'])) {
             $userName = $_POST["username"];
+        }
+        if (isset($_POST['userPass'])) {
+            $userPass = $_POST["userPass"];
         }
         if (isset($_POST['userPass'])) {
             $userPass = $_POST["userPass"];
@@ -90,6 +94,7 @@
         //session_start();
         $user=darbuotojas::getPagalVartotojoVarda($userName);
         $_SESSION["userID"] = $user->id;
+        echo $_SESSION["userID"];
        // var_dump($user);
         ?>
 
