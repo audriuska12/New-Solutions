@@ -11,7 +11,6 @@
 include "prekes_zymejimas.php";
 include "turizymejima.php";
 include "preke.php";
-include "testfile.php";
 $userID = 10;
 // Create connection
 $conn = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));

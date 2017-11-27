@@ -3,7 +3,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include "darbuotojas.php";
-include "grupe.php";
 if (!isset($_SESSION['userID'])) {
     header("Location:accessDenied.php");
 }

@@ -3,7 +3,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include "darbuotojas.php";
-include "grupe.php";
 if (!isset($_SESSION['userID'])) {
     header("Location:accessDenied.php");
 }
@@ -19,7 +18,7 @@ if (isset($_POST['administratorius'])) {
         header("Location:accessDenied.php");
     } else {
         $grupe->changeAdministratorius($_POST['administratorius']);
-        header("Location: grupesAdministruojamos.php");
+        header("Location: grupesView.php");
     }
 }
 ?>
