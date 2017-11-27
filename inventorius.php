@@ -15,8 +15,7 @@ if (!isset($_SESSION['userID'])) {
 include "linksDarbuotojai.php";
 $user = darbuotojas::getFromDatabase($_SESSION['userID']);
 $userIDD=$user->id;
-//$userID = $user->getRusis()->id;
-$userID = 3;
+$userRUSIS = $user->getRusis()->id;
 include "prekes_zymejimas.php";
 include "turizymejima.php";
 include "preke.php";
@@ -26,7 +25,7 @@ include "preke.php";
 
 //DARBUOTOJO GUI
 
-if($userID == 1){
+if($userRUSIS == 1){
     
     
 $conn = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
@@ -37,7 +36,7 @@ if ($conn->connect_error) {
 $sql = "SELECT pavadinimas, kaina, kiekis, id FROM preke";
 $result = $conn->query($sql);
 
-if ($result->num_rows >= 0) {
+if ($result->num_rows > 0) {
     echo '<font size="5"'." face='Arial'>" . "Parduotuvės inventorius:" . '</font>';
     echo("<table>");
     echo("<tr> <th>Pavadinimas </th> <th>Kaina </th> <th>Kiekis</th> <th> Keisti kiekį </th>");
@@ -68,7 +67,7 @@ if ($result->num_rows >= 0) {
 //PARDUOTUVES VADOVO GUI
 
     
-if($userID == 2){
+if($userRUSIS == 2){
         
         // Create connection
 $conn = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
@@ -79,7 +78,7 @@ if ($conn->connect_error) {
 $sql = "SELECT pavadinimas, kaina, kiekis, id FROM preke";
 $result = $conn->query($sql);
 
-if ($result->num_rows >= 0) {
+if ($result->num_rows > 0) {
     echo '<font size="5"'." face='Arial'>" . "Parduotuvės inventorius:" . '</font>';
     echo("<table>");
     echo("<tr> <th>Pavadinimas </th> <th>Kaina </th> <th>Kiekis</th> <th> Keisti kiekį </th> <th>Žymė</th>");
@@ -132,7 +131,7 @@ if ($result->num_rows >= 0) {
     }
     
     //Parduotuvių tinklo vadovo GUI
-    if($userID == 3){
+    if($userRUSIS == 3){
           
 $conn = mysqli_connect(get_cfg_var('dbhost'), get_cfg_var('dbuser'), get_cfg_var('dbpw'), get_cfg_var('dbname'));
 if ($conn->connect_error) {
@@ -141,7 +140,7 @@ if ($conn->connect_error) {
 $sql = "SELECT pavadinimas, kaina, kiekis, id FROM preke";
 $result = $conn->query($sql);
 
-if ($result->num_rows >= 0) {
+if ($result->num_rows > 0) {
     echo '<font size="5"'." face='Arial'>" . "Parduotuvės inventorius:" . '</font>';
     echo("<table>");
     echo("<tr> <th>Pavadinimas </th> <th>Kaina </th> <th>Kiekis</th> <th> Keisti kiekį </th> <th>Žymė</th><th></th> <th>Keisti žymę</th><th>Šalinti žymę</th>");

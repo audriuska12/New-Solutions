@@ -21,7 +21,7 @@ if($count>0){
     echo("<tr><th>Rašė</th><th>Data</th><th>Matomumas</th><th>Tekstas</th></tr>");
     for($i=0; $i<$count; $i++){
         $rasytojas=darbuotojas::getFromDatabase($pastabos[$i]->rasytojas);
-        echo("<tr><td>".$rasytojas->pavarde." ".$rasytojas->vardas."</td><td>".$pastabos[$i]->rasymo_data."</td><td>".(($pastabos[$i]->matomumas=0) ? "vieša":"privati")."</td><td>".$pastabos[$i]->tekstas."</td></tr>");
+        echo("<tr><td>".$rasytojas->pavarde." ".$rasytojas->vardas."</td><td>".$pastabos[$i]->rasymo_data."</td><td>".(($pastabos[$i]->viesa==1) ? "Vieša":"Privati")."</td><td>".$pastabos[$i]->tekstas."</td></tr>");
     }
     echo("</table>");
 }

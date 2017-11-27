@@ -21,8 +21,8 @@ if($grafikas != NULL){
     echo("<tr><th>Pirmadienis</th><th>Antradienis</th><th>Trečiadienis</th><th>Ketvirtadienis</th><th>Penktadienis</th><th>Šeštadienis</th><th>Sekmadienis</th></tr>");
     echo("<tr><td>".$grafikas->laikas_pirmad."</td><td>".$grafikas->laikas_antrad."</td><td>".$grafikas->laikas_treciad."</td><td>".$grafikas->laikas_ketvirtad."</td><td>".$grafikas->laikas_penktad."</td><td>".$grafikas->laikas_sestad."</td><td>".$grafikas->laikas_sekmad."</td></tr>");
     echo("</table>");
-    if($user->id == $darbuotojas->id || $user->arVirsesnis($darbuotojas)){echo ("<a href=\"grafikasEdit.php?darbuotojas=".$_GET['id']."\">Redaguoti</a>");}
+    if(($user->id == $darbuotojas->id && $user->getRusis() != "Darbuotojas") || $user->arVirsesnis($darbuotojas)){echo ("<a href=\"grafikasEdit.php?darbuotojas=".$_GET['id']."\">Redaguoti</a>");}
 } else {
     echo "Darbuotojas neturi grafiko!</br>";
-    if($user->id == $darbuotojas->id || $user->arVirsesnis($darbuotojas)){echo "<a href=\"grafikasCreate.php?darbuotojas=".$_GET['id']."\">Sukurti naują</a>";}
+    if(($user->id == $darbuotojas->id && $user->getRusis() != "Darbuotojas") || $user->arVirsesnis($darbuotojas)){echo "<a href=\"grafikasCreate.php?darbuotojas=".$_GET['id']."\">Sukurti naują</a>";}
 }

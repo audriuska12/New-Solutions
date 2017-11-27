@@ -16,7 +16,7 @@
         $user = darbuotojas::getFromDatabase($_SESSION['userID']);
         include "linksDarbuotojai.php";
         include "zinute.php";
-        echo("Gautos žinutės:</br>");
+        echo("Išsiųstos žinutės:</br>");
         $zinutes = zinute::gautiIssiustasZinutes($_SESSION['userID']);
         echo("<table>");
         echo("<tr><th>Gavėjas</th><th></th></tr>");

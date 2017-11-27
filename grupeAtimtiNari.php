@@ -7,7 +7,6 @@ include "darbuotojas.php";
 if (!isset($_SESSION['userID'])) {
     header("Location:accessDenied.php");
 }
-include "grupe.php";
 $grupe = grupe::getFromDatabase($_GET['grupe']);
 if ($grupe->administratorius == $_SESSION['userID']) {
     $grupe->removeDarbuotojas($_GET['id']);

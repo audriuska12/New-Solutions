@@ -51,19 +51,6 @@ $select4 .= '</select>';
 echo $select4;
 echo("</td></tr>");
 
-echo ("<tr><td> Prekes apskaita: ");
-
-$sql2 = "SELECT id FROM prekiu_apskaita";
-$result2 = $dbc->query($sql2);
-if ($result2->num_rows > 0) {
-    $select2 = '<select name="select3">';
-    while ($rs2 = mysqli_fetch_array($result2)) {
-        $select2 .= '<option value="' . $rs2['id'] . '">' . $rs2['id'] . '</option>';
-    }
-}
-$select2 .= '</select>';
-echo $select2;echo("</td></tr>");
-
 echo ("<tr><td>Pridejimo priezastis: ");
 $sql1 = "SELECT id, pavadinimas FROM pridejimas";
 $result1 = $dbc->query($sql1);
