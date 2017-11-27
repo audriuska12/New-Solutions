@@ -22,7 +22,7 @@
         echo("<tr><th>Gavėjas</th><th></th></tr>");
         $count = count($zinutes);
         for($i=0; $i<$count; $i++){
-            echo("<tr><td>".$zinutes[$i]->gavejas->pavarde." ".$zinutes[$i]->gavejas->vardas."</td><td><a href=zinuteSkaityti.php?id=\"".$zinutes[$i]->id."&src=outbox.php\">Skaityti</a></td></tr>");
+            echo("<tr><td>".$zinutes[$i]->pavarde." ".$zinutes[$i]->vardas."</td><td><a href=zinuteSkaityti.php?id=\"".$zinutes[$i]->id."&src=outbox.php\">Skaityti</a></td></tr>");
         }
         echo("</table></br>");
         ?>
